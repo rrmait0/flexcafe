@@ -1,0 +1,86 @@
+import '/flutter_flow/flutter_flow_calendar.dart';
+import '/flutter_flow/flutter_flow_theme.dart';
+import '/flutter_flow/flutter_flow_util.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
+import 'calendar_model.dart';
+export 'calendar_model.dart';
+
+class CalendarWidget extends StatefulWidget {
+  const CalendarWidget({Key? key}) : super(key: key);
+
+  @override
+  _CalendarWidgetState createState() => _CalendarWidgetState();
+}
+
+class _CalendarWidgetState extends State<CalendarWidget> {
+  late CalendarModel _model;
+
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _unfocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+    _model = createModel(context, () => CalendarModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
+  }
+
+  @override
+  void dispose() {
+    _model.dispose();
+
+    _unfocusNode.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).requestFocus(_unfocusNode),
+      child: Scaffold(
+        key: scaffoldKey,
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
+        appBar: AppBar(
+          backgroundColor: Color(0xFF1C8600),
+          automaticallyImplyLeading: false,
+          title: Text(
+            'Flex Café Calendar',
+            style: FlutterFlowTheme.of(context).headlineMedium.override(
+                  fontFamily: 'Poppins',
+                  color: Colors.white,
+                  fontSize: 22,
+                ),
+          ),
+          actions: [],
+          centerTitle: false,
+          elevation: 2,
+        ),
+        body: SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              FlutterFlowCalendar(
+                color: FlutterFlowTheme.of(context).primary,
+                weekFormat: false,
+                weekStartsMonday: false,
+                initialDate: getCurrentTimestamp,
+                onChange: (DateTimeRange? newSelectedDate) {
+                  setState(() => _model.calendarSelectedDay = newSelectedDate);
+                },
+                titleStyle: TextStyle(),
+                dayOfWeekStyle: TextStyle(),
+                dateStyle: TextStyle(),
+                selectedDateStyle: TextStyle(),
+                inactiveDateStyle: TextStyle(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
